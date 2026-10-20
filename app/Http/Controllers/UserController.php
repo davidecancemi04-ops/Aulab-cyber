@@ -197,16 +197,13 @@ class UserController extends Controller
     
     if(!$user Auth::user()){
     
-     
     
     
 
     return back()->with('message', 'Please Log In');
      }
-    $fileRecord File::where('uid', $file)->where('user_id', $user->id)->firstOrFail();
-    
-    if(!$fileRecord) {
+    $f    $fileRecord File::where('uid', $file)->where('user_id', $user->id)->firstOrFail();
+!$fil    if(!$fileRecord) {
     
     return back()->with('message', 'File not found');
-}
 }
