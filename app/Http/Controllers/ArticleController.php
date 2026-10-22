@@ -30,9 +30,11 @@ class ArticleController extends Controller
         //$articles = Article::whereRaw("title like '%{$request->search}%'")->get();
 
         // SECURE
-        // $articles = Article::where('title', 'LIKE', "%{$request->search}%")
-        //                     ->orWhere('content', 'LIKE', "%{$request->search}%")
-        // ->get();
+       //  'search' => 'required|string|max:255',
+        //]);
+        $articles = Article::where('title', 'LIKE', "%{$request->search}%")
+                     ->orWhere('content', 'LIKE', "%{$request->search}%")
+         ->get();
         
         return view('articles.index',compact('articles'));
     }
