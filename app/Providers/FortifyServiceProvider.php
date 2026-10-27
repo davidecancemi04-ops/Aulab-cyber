@@ -30,7 +30,9 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::authenticateUsing(new AutenticateUser::class,'_invoke');
+        Fortify::authenticateUsing(function (Request $request) {
+             return (new AutenticateUser())->authenticate($request);
+});
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
