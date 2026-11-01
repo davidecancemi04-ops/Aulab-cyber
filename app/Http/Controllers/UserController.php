@@ -207,3 +207,8 @@ class UserController extends Controller
     
     return back()->with('message', 'File not found');
 }
+if(!storage::disk('local')->exists($path)){
+    abort(404);
+}
+return Storage::disk('local')->download($path, $fileRecord->uid);
+}

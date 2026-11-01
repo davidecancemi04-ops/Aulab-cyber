@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'auth' => \App\Http\Middleware\Authenticate::class,
+            //da ricordare
+            'block_suspicious_ips' => \App\Http\Middleware\SuspiciousIps::class,
+
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
     })

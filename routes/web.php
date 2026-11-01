@@ -43,7 +43,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/email/change',[UserController::class,'changeEmail'])->name('change.email');
     Route::post('/users/img/change',[UserController::class,'changeImg'])->name('change.img');
 
-    
+    Route::post('/users/upload', [UserController::class,'upload'])->name('users.upload');
+    Route::get('/users/download/{file}', [UserController::class,'downloadPrivateFile'])->name('users.download');
+    Route::get('/download-privacy', [UserController::class,'downloadPrivacy'])->name('download.privacy');
      // UNSECURERoute::get('/download-privacy', [UserController::class,'download'])->name('download');
     //Route::prefix('dashboard')->group(function () {
     // SECURE
@@ -57,15 +59,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('articles/{id}/toggle',[AdminController::class,'toggleArticleStatus'])->name('admin.articles.toggle');
 
         // UNSECURE - VULNERABILE A SSRF: fetch dati esterni da URL arbitrario
-        Route::get('/fetch-external-data', [AdminController::class,'fetchExternalData'])->name('admin.fetch-external-data');
+       //Route::get('/fetch-external-data', [AdminController::class,'fetchExternalData'])->name('admin.fetch-external-data');
         // Route::post('/users/{id}/toggle', [AdminController::class,'toggleUsersAdmin'])->name('admin.users.toggle');
         // Route::post('/articles/{id}/toggle',[AdminController::class,'toggleArticleStatus'])->name('admin.articles.toggle');
     });
     // UNSECURE
-    Route::post('/articles/{articleId}/comments', [CommentController::class, 'store'])->name('comments.store');
+    //Route::post('/articles/{articleId}/comments', [CommentController::class, 'store'])->name('comments.store');
     
     // SECURE
-    // Route::post('/articles/{articleId}/comments', [CommentController::class, 'store'])->middleware(['block.suspicious'])->name('comments.store');
+     Route::post('/articles/{articleId}/comments', [CommentController::class, 'store'])->middleware(['block.suspicious'])->name('comments.store');
 });
 
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
