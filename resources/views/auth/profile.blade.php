@@ -95,7 +95,7 @@
         <ul>
             @forelse ($user->files as $file)
                 <li>
-                    <a href="{{Storage::url("public/docs/users/$user->id/" . $file->name)}}">{{$file->name}}</a>
+                    <a href="{{route('users.download', $file->uid)}}">{{$file->name}}</a>
                 </li>
             @empty
                 <p class="text-muted">no files</p>
