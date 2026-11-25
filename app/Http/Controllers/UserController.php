@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,21 +12,15 @@ use Intervention\Image\Facades\Image as Image;
 
 class UserController extends Controller
 {
-    // UNSECURE
-    public function show($id)
-	/*{
-		$user = User::findOrFail($id);
-
-        return view('auth.profile',compact('user'));
-	}
-*/
     // SECURE
-     public function profile(){
-      if(!$user = Auth::user())
-     return response()->json(['message' => 'Forbidden Operation'], 403);
-        
-        return view('auth.profile',compact('user'));
-     }
+    public function profile()
+    {
+        if (!$user = Auth::user()) {
+            return response()->json(['message' => 'Forbidden Operation'], 403);
+        }
+
+        return view('auth.profile', compact('user'));
+    }
 
     public function update(Request $request, $id){
         $user = User::find($id);
@@ -203,22 +198,21 @@ $user->update($request->validate([
     return back()->withMessage("Upload successful");
     }
     
-    public function download PrivateFile($file)
-    
-    if(!$user Auth::user()){
-    
-    
-    
+    public function downloadPrivateFile($file)
+    {
+        if (!$user = Auth::user()) {
+            return back()->with('message', 'Please Log In');
+        }
 
-    return back()->with('message', 'Please Log In');
-     }
-    $f    $fileRecord File::where('uid', $file)->where('user_id', $user->id)->firstOrFail();
-!$fil    if(!$fileRecord) {
-    
-    return back()->with('message', 'File not found');
-}
-if(!storage::disk('local')->exists($path)){
-    abort(404);
-}
-return Storage::disk('local')->download($path, $fileRecord->uid);
-}
+        $fileRecord = File::where('uid', $file)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $path = "docs/users/{$user->id}/{$fileRecord->uid}";
+
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404);
+        }
+
+        return Storage::disk('local')->download($path, $fileRecord->name);
+    }
